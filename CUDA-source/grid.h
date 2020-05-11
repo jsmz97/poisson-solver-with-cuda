@@ -3,7 +3,7 @@
 #ifndef STRUCT_VAR_CU_H
 #define STRUCT_VAR_CU_H
 
-#include "parameters_cu.h"     // For access to Nx, Ny
+#include "parameters.h"     // For access to Nx, Ny
 
 // Following https://stackoverflow.com/a/8095711
 typedef struct  // use typedef for convenience, no need to type "struct" all over the place

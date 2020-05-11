@@ -3,9 +3,8 @@
 #define GLOBAL_FUNC_CU
 
 #include <stdio.h>
-// #include "head_cu.h"
-#include "parameters_cu.h"
-#include "struct_var_cu.h"
+#include "parameters.h"
+#include "grid.h"
 
 // Kernel definition with __global__
 __global__ void grid_init (Grid_t *u){
@@ -148,7 +147,7 @@ __global__ void calc_grid (Grid_t *u){
         // __syncthreads();
 
         // Successive Overrelaxation (SOR) method
-        u->element[i][j] += OMEGA * u->residual[i][j];
+        u->element[i][j] = element_new;
     }
 }
 

@@ -3,11 +3,11 @@
 #define KERNEL_CU
 
 #include <stdio.h>
-#include "head_cu.h"
-#include "global_func.cu"
-#include "host_device_func.cu"
-#include "parameters_cu.h"
-#include "struct_var_cu.h"
+#include "declare_func.h"
+#include "define_global_func.cu"
+#include "define_host_func.cu"
+#include "parameters.h"
+#include "grid.h"
 
 // __device__ int *d_p_not_tolerent;
 
