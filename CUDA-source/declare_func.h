@@ -11,7 +11,7 @@ __global__ void boundary (Grid_t *u, int b_type);
 
 __global__ void calc_grid (Grid_t *u);
 
-__global__ void tolerence_test (Grid_t *u, float tolerence);
+__global__ void is_convergent (Grid_t *u, float tolerence);
 
 __global__ void reset_d_not_tolerent ();
 

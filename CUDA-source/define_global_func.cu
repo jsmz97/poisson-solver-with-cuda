@@ -94,7 +94,7 @@ __global__ void reset_d_not_tolerent (){
 
 
 // Test whether residuals are within tolerence.
-__global__ void tolerence_test (Grid_t *u, float tolerence){
+__global__ void is_convergent (Grid_t *u, float tolerence){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 

@@ -22,6 +22,9 @@
 #define ERROR 1e-1
 #define NLOOPS 1
 
+// Source term paramter
+#define SOURCE 0
+
 // Output parameters
 #define DIRNAME "Outputs"
 #define SUFFIX ".dat"
