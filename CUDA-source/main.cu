@@ -10,11 +10,11 @@ int main(){
     // Grid_t h_u;
     Grid_t *h_u = (Grid_t*)malloc(sizeof(Grid_t));
 
-    // Solve the Laplace's equation and save results to h_u->element.
+    // Solve the Laplace's equation and save results to h_u->value.
     solve_laplace(h_u);
 
     // Save results to a file.
-    save_results(h_u->element);
+    save_results(h_u->value);
 
     // Free the pointer.
     free(h_u);

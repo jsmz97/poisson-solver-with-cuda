@@ -13,7 +13,7 @@
 
 __host__ void solve_laplace(Grid_t *h_u){
     Grid_t *d_u;
-    size_t size_matrix = sizeof(h_u->element);
+    size_t size_matrix = sizeof(h_u->value);
 
     cudaMalloc(&d_u, sizeof(Grid_t));
 
@@ -50,7 +50,7 @@ __host__ void solve_laplace(Grid_t *h_u){
     } while(h_not_tolerent);
 
     // Copy memory from device to host.
-    cudaMemcpy(h_u->element, d_u->element, size_matrix,
+    cudaMemcpy(h_u->value, d_u->value, size_matrix,
                 cudaMemcpyDeviceToHost);
 
      // Free device memory

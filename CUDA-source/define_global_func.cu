@@ -13,7 +13,7 @@ __global__ void grid_init (Grid_t *u){
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
     if(i < Nx && j < Ny){
-        u->element[i][j] = 0;
+        u->value[i][j] = 0;
     }
 }
 
@@ -28,36 +28,36 @@ __global__ void boundary (Grid_t *u, int type){
         case 1:    // Linear BVC
             if(i == 0){
                 // grid[0][j].
-                u->element[0][j] = j * 100. / Ny;
+                u->value[0][j] = j * 100. / Ny;
             }
             else if(i == Nx - 1){
-                u->element[Nx-1][j] = (j - Ny + 1) * 100. / Ny;
+                u->value[Nx-1][j] = (j - Ny + 1) * 100. / Ny;
             }
             else if(j == 0){
-                u->element[i][0] = (-i) * 100. / Nx;
+                u->value[i][0] = (-i) * 100. / Nx;
             }
             else if(j == Ny - 1){
-                u->element[i][Ny-1] = (Nx - 1 - i) * 100. / Nx;
+                u->value[i][Ny-1] = (Nx - 1 - i) * 100. / Nx;
             }
             break;
         case 2:    // Sinunoidal BVC
             if(i == 0){
-                u->element[0][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
+                u->value[0][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
             }
             else if(i == Nx - 1){
-                u->element[Nx-1][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
+                u->value[Nx-1][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
             }
             if(j == 0){
-                u->element[i][0] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
+                u->value[i][0] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
             }
             else if(j == Ny - 1){
-                u->element[i][Ny-1] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
+                u->value[i][Ny-1] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
             }
             break;
 
         default:    // Constant BVC
             if(i == 0){
-                u->element[0][j] = 100.;
+                u->value[0][j] = 100.;
             }
             break;
         }
@@ -70,18 +70,18 @@ __global__ void calc_grid (Grid_t *u){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
-    typeof(u->element[0][0]) element_new;
+    typeof(u->value[0][0]) value_new;
 
     // The following calculation supposes a rectanglular region.
     if(i < Nx - 1 && i > 0 && j < Ny - 1 && j > 0){
-        
+
         // Calculate the new value at the current node
-        element_new = 0.25 * (u->element[i+1][j] + u->element[i][j+1] +
-                              u->element[i-1][j] + u->element[i][j-1]);
+        value_new = 0.25 * (u->value[i+1][j] + u->value[i][j+1] +
+                              u->value[i-1][j] + u->value[i][j-1]);
         // Save the residual for convergence test
-        u->residual[i][j] = element_new - u->element[i][j];
+        u->residual[i][j] = value_new - u->value[i][j];
         // Update the values of the current node
-        u->element[i][j] = element_new;
+        u->value[i][j] = value_new;
     }
 }
 

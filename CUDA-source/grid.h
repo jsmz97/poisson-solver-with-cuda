@@ -11,7 +11,7 @@ typedef struct  // use typedef for convenience, no need to type "struct" all ove
     // float value_new[Nx][Ny];
     // float value_old[Nx][Ny];
 
-    float element[Nx][Ny];
+    float value[Nx][Ny];
     // Residuals on the oundary are useless, but kept for convenient.
     float residual[Nx][Ny];
 } Grid_t;
