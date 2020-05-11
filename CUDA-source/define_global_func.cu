@@ -6,116 +6,61 @@
 #include "parameters.h"
 #include "grid.h"
 
-// Kernel definition with __global__
+/* Grid Initialization */
 __global__ void grid_init (Grid_t *u){
-    // blockIdx, blockDim, threadIdx are built-in kernel variables.
+
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
-    if(i < Nx && j < Ny){   // All range
+    if(i < Nx && j < Ny){
         u->element[i][j] = 0;
     }
 }
 
 
-// Boundary conditions.
-__global__ void boundary (Grid_t *u, int b_type){
+/* Boundary Value Initialization */
+__global__ void boundary (Grid_t *u, int type){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
 	if(i < Nx && j < Ny){
-    switch(b_type){
-    case 1:    // Linear initial boundary values.
-        if(i == 0){
-            // grid[0][j].
-            u->element[0][j] = j * 100. / Ny;
+        switch(type){
+        case 1:    // Linear BVC
+            if(i == 0){
+                // grid[0][j].
+                u->element[0][j] = j * 100. / Ny;
+            }
+            else if(i == Nx - 1){
+                u->element[Nx-1][j] = (j - Ny + 1) * 100. / Ny;
+            }
+            else if(j == 0){
+                u->element[i][0] = (-i) * 100. / Nx;
+            }
+            else if(j == Ny - 1){
+                u->element[i][Ny-1] = (Nx - 1 - i) * 100. / Nx;
+            }
+            break;
+        case 2:    // Sinunoidal BVC
+            if(i == 0){
+                u->element[0][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
+            }
+            else if(i == Nx - 1){
+                u->element[Nx-1][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
+            }
+            if(j == 0){
+                u->element[i][0] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
+            }
+            else if(j == Ny - 1){
+                u->element[i][Ny-1] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
+            }
+            break;
+
+        default:    // Constant BVC
+            if(i == 0){
+                u->element[0][j] = 100.;
+            }
+            break;
         }
-        else if(i == Nx - 1){
-            // grid[Nx-1][j].
-            u->element[Nx-1][j] = (j - Ny + 1) * 100. / Ny;
-        }
-        else if(j == 0){
-            // grid[i][0].
-            u->element[i][0] = (-i) * 100. / Nx;
-        }
-        else if(j == Ny - 1){
-            // grid[i][Ny-1].
-            u->element[i][Ny-1] = (Nx - 1 - i) * 100. / Nx;
-        }
-        break;
-    case 2:    // Sinunoidal initial boundary values.
-        if(i == 0){
-            // grid[0][j].
-            u->element[0][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
-        }
-        else if(i == Nx - 1){
-            // grid[Nx-1][j].
-            u->element[Nx-1][j] = 100. * sinf( ((float) j) / Ny * 2 * M_PI);
-        }
-        if(j == 0){
-            // grid[i][0].
-            u->element[i][0] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
-        }
-        else if(j == Ny - 1){
-            // grid[i][Ny-1].
-            u->element[i][Ny-1] = 100. * sinf( ((float) i) / Ny * 2 * M_PI);
-        }
-        break;
-    case 3:     // Linear, discontinuous at one end point.
-        if(i == 0){
-            // grid[0][j].
-            u->element[0][j] = (float)j * 25. / Ny;
-        }
-        else if(i == Nx - 1){
-            // grid[Nx-1][j].
-            u->element[Nx-1][j] = (3. * Ny - 3.0 - j) * 25. / Ny;
-        }
-        else if(j == 0){
-            // grid[i][0].
-            u->element[i][0] = (4. * Nx - 4.0 - i) * 25. / Nx;
-        }
-        else if(j == Ny - 1){
-            // grid[i][Ny-1].
-            u->element[i][Ny-1] = (Ny - 1. + i) * 25. / Nx;
-        }
-        break;
-    case 4:	// Linear, four discontinuous end points
-		if(i == 0){
-            // grid[0][j].
-	    	if(j < Ny / 2)
-            	u->element[0][j] = j * 100. / Ny;
-        	else
-        		u->element[0][j] = (j - Ny + 1) * 100. / Ny;
-        }
-        else if(i == Nx - 1){
-            // grid[Nx-1][j].
-            if(j < Ny / 2)
-	            u->element[Nx-1][j] = -j * 100. / Ny;
-            else
-            	u->element[Nx-1][j] = (Ny - 1 - j) * 100. / Ny;
-        }
-        else if(j == 0){
-            // grid[i][0].
-            if(i < Nx / 2)
-	            u->element[i][0] = -i * 100. / Nx;
-            else
-            	u->element[i][0] = (Nx - 1 - i) * 100. / Nx;
-        }
-        else if(j == Ny - 1){
-            // grid[i][Ny-1].
-            if(i < Nx / 2)
-            	u->element[i][Ny-1] = i * 100 / Nx;
-        	else
-        		u->element[i][Ny-1] = (i - Nx - 1) * 100. / Nx;
-        }
-        break;
-    default:    // Constant initial boundary values.
-        // For x = 0, grid_value's are 100; otherwise 0.
-        if(i == 0){
-            u->element[0][j] = 100.;
-        }
-        break;
-    }
     }
 }
 
@@ -128,25 +73,14 @@ __global__ void calc_grid (Grid_t *u){
     typeof(u->element[0][0]) element_new;
 
     // The following calculation supposes a rectanglular region.
-    if(i < Nx - 1 && i > 0 && j < Ny - 1 && j > 0){   // Inner part
-        // // Temperary new grid value without Gauss-Seidel method.
-        // element_new = 0.25 * (u->value_old[i+1][j] + u->value_old[i][j+1] +
-        //                       u->value_old[i-1][j] + u->value_old[i][j-1]);
+    if(i < Nx - 1 && i > 0 && j < Ny - 1 && j > 0){
         
-        // Temperary new grid value using Gauss-Seidel method.
+        // Calculate the new value at the current node
         element_new = 0.25 * (u->element[i+1][j] + u->element[i][j+1] +
                               u->element[i-1][j] + u->element[i][j-1]);
-
-        // // Synchronize threads to ensure value_new[][] are new.
-        // __syncthreads();
-
+        // Save the residual for convergence test
         u->residual[i][j] = element_new - u->element[i][j];
-
-        // u->value_new[i][j] = element_new;
-        // // Synchronize threads to ensure value_new[][] are new.
-        // __syncthreads();
-
-        // Successive Overrelaxation (SOR) method
+        // Update the values of the current node
         u->element[i][j] = element_new;
     }
 }
