@@ -1,10 +1,10 @@
 // #include <stdio.h>   // included in aux_func.c for debug
 // #include <stdlib.h>     // For exit(1)
 
-#include "host_device_func.cu"
-#include "kernel.cu"
-#include "struct_var_cu.h"
-// #include "parameters_cu.h"
+#include "define_host_func.cu"
+#include "solver.cu"
+#include "grid.h"
+
 
 int main(){
     // Grid_t h_u;

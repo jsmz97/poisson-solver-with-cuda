@@ -4,9 +4,7 @@
 
 #include <stdlib.h>     // For exit(1)
 #include <stdio.h>
-#include "parameters_cu.h"
-// #include "struct_var_cu.h"
-// #include "head_cu.h"
+#include "parameters.h"
 
 // Test if the value exceeds the maximul value. If so, print error info.
 __device__ int is_exceed (float value, float max){

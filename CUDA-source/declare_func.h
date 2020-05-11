@@ -3,7 +3,7 @@
 #ifndef HEAD_CU_H
 #define HEAD_CU_H
 
-#include "struct_var_cu.h"
+#include "grid.h"
 
 // Kernel definition with __global__
 __global__ void grid_init (Grid_t *u);
