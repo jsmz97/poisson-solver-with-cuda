@@ -19,7 +19,7 @@ __host__ void solve_laplace(Grid_t *h_u){
 
     typeof(d_not_tolerent) h_not_tolerent;
 
-    // Use this counter to do tolerence_test every NLOOPS loops.
+    // Use this counter to do is_convergent every NLOOPS loops.
     int counter = 0;
 
     // Invoke kernel.
@@ -39,11 +39,11 @@ __host__ void solve_laplace(Grid_t *h_u){
         // update_old_grid<<<dimGrid, dimBlock>>>(d_u);
         calc_grid<<<dimGrid, dimBlock>>>(d_u);
 
-        // Run tolerence_test every NLOOPS loops.
+        // Run is_convergent every NLOOPS loops.
         if(!counter){
-            // Following https://stackoverflow.com/a/2637310
+            
             reset_d_not_tolerent<<<1, 1>>>();
-            tolerence_test<<<dimGrid, dimBlock>>>(d_u, ERROR);
+            is_convergent<<<dimGrid, dimBlock>>>(d_u, ERROR);
             cudaMemcpyFromSymbol(&h_not_tolerent, d_not_tolerent, sizeof(d_not_tolerent));
         }
         counter = (counter + 1) % NLOOPS;
