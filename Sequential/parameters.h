@@ -20,10 +20,9 @@
 #define SOURCE 0
 
 
-//Output files directory
-#define DIRNAME "Outputs"
 
-// Output files parameters
+// Output parameters
+#define DIRNAME "Outputs"
 #define SUFFIX ".dat"
 #define STR_HELPER(INT) #INT
 #define STR(INT) STR_HELPER(INT)

@@ -6,8 +6,5 @@ Jacobi:
 clean:
 	rm Jacobi
 
-archive:
-	mv Outputs/*.dat Outputs/Archive/.
-
-destroy:
-	rm -rf Outputs/*
+shred:
+	rm Outputs/*.dat
