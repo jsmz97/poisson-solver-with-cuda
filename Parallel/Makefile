@@ -1,7 +1,7 @@
 NVCC = nvcc
 
 cuJacobi:
-	$(NVCC) main.cu -o cuJacobi
+	$(NVCC) Jacobi.cu -o cuJacobi
 build:
 	mkdir Outputs
 clean:
