@@ -3,20 +3,19 @@
 #ifndef PARAMETERS_CU_H
 #define PARAMETERS_CU_H
 
-#define BLOCK_SIZE 16
+#define THREADS_PER_BLOCK 4
 
-#define Nx 1000
+#define Nx 100
 #define Ny Nx
 
 // Boundary type parameters
-// 1: "linear", 2: "sinunoidal", 3: "linear, one discontinuous point", 4: "linear, four discontinuous points",
-// any others: "constant"
-#define BOUNDARY 0 
+// 1: "linear", 2: "sinunoidal", default: "constant"
+#define BOUNDARY 1
 
 // Error tolerence parameter
-#define ERROR_DECIMAL_DIG 1
-#define ERROR 1e-1
-#define NLOOPS 1
+#define ERROR_DECIMAL_DIG 2
+#define ERROR 1e-2
+#define NLOOPS 10
 
 // Source term paramter
 #define SOURCE 0

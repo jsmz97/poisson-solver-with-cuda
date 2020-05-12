@@ -64,27 +64,27 @@ void grid_update (Grid_t *u, int type){
     // Declare the intermediate result
     typeof((*u)->value[0][0]) value_new;
     // Declare the source term
-    typeof((*u)->value) source;
+    //typeof((*u)->value) source;
     // Initialize the source term
-    for(int i = 0; i < Nx; i++)
-        for(int j = 0; j < Ny; j++){
-            source[i][j] = 0.;
-    }
-    int x_mid = Nx/2;
-    int y_mid = Nx/2;
+    // for(int i = 0; i < Nx; i++)
+    //    for(int j = 0; j < Ny; j++){
+    //        source[i][j] = 0.;
+    //}
+    //int x_mid = Nx/2;
+    //int y_mid = Nx/2;
     // Add source term or not
-    switch(type){
+    //switch(type){
         // Pseudo-delta
-        case 1: source[x_mid][y_mid] = 100; break;
+        //case 1: source[x_mid][y_mid] = 100; break;
         // 
-        default: break;
-    }
+        //default: break;
+    //}
 
     // Iteration over the grid except for i or j = 0 or N-2
     for(int i = 1; i < Nx - 1; i++)
         for(int j = 1; j < Ny - 1; j++){
             // Calculate the new value at the current node
-            value_new = 0.25 * (source[i][j] + (*u)->value[i+1][j] + (*u)->value[i][j+1] +
+            value_new = 0.25 * ((*u)->value[i+1][j] + (*u)->value[i][j+1] +
                           (*u)->value[i-1][j] + (*u)->value[i][j-1]);
             // Save the residual for convergence test
 	        (*u)->residual[i][j] = value_new - (*u)->value[i][j];

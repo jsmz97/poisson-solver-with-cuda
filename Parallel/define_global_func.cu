@@ -1,3 +1,5 @@
+/* define_global_functions defines functions that are executed on the device */
+
 #ifndef DEFINE_GLOBAL_FUNC_CU
 #define DEFINE_GLOBAL_FUNC_CU
 
@@ -18,7 +20,7 @@ __global__ void grid_init (Grid_t *u){
 
 
 /* Boundary Value Initialization */
-__global__ void boundary (Grid_t *u, int type){
+__global__ void boundary_init (Grid_t *u, int type){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
@@ -64,14 +66,13 @@ __global__ void boundary (Grid_t *u, int type){
 }
 
 
-// Calculate the new function values, USING Gauss-Seidel method.
-__global__ void calc_grid (Grid_t *u){
+/* Calculation of Node Values Using Jacobi Iteration */
+__global__ void grid_update (Grid_t *u){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
     typeof(u->value[0][0]) value_new;
 
-    // The following calculation supposes a rectanglular region.
     if(i < Nx - 1 && i > 0 && j < Ny - 1 && j > 0){
 
         // Calculate the new value at the current node
@@ -85,21 +86,27 @@ __global__ void calc_grid (Grid_t *u){
 }
 
 
-// Following https://stackoverflow.com/a/2637310
-// Reset the *d_p_not_tolerent to 0.
+/* Convergent Test */
+
+// Define a boolean value for loop control.
+__device__ unsigned int d_not_tolerent;
+
+// Define a value that resets d_not_tolerent.
 __global__ void reset_d_not_tolerent (){
     d_not_tolerent = 0;
+    // 0 = true ; else = false.
 }
 
 
-// Test whether residuals are within tolerence.
+// Define a function that carry out the convergence test.
 __global__ void is_convergent (Grid_t *u, float tolerence){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
     if(i > 0 && i < Nx - 1 && j > 0 && j < Ny - 1){
-        if(is_exceed(u->residual[i][j], tolerence)){
-            // d_not_tolerent works as a bool type value.
+        if(fabsf(u->residual[i][j]) > fabsf(tolerence)){
+            // If the convergence criterium is not satisfied, return false.
+	    // A simple way is to increment d_not_tolerent.
             d_not_tolerent++;
         }
     }

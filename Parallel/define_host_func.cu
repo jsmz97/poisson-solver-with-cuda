@@ -5,16 +5,10 @@
 #include <stdio.h>
 #include "parameters_cu.h"
 
-// Test if the value exceeds the maximul value. If so, print error info.
-__device__ int is_exceed (float value, float max){
-    return (fabsf(value) > fabsf(max));
-}
-
-
-// Write the results to a file with the given file name.
+/* Write Results */
 __host__ void output (FILE *file, float grid_value[Nx][Ny]){
     int i, j;
-    // Output for gnuplot splot.
+
     for(i = 0; i < Nx; i++){
         for(j = 0; j < Ny; j++){
             fprintf(file, "%.*f\n", ERROR_DECIMAL_DIG, grid_value[i][j]);
@@ -23,14 +17,10 @@ __host__ void output (FILE *file, float grid_value[Nx][Ny]){
     }
 }
 
-
-// Process save of the results.
+/* Save Results */
 __host__ void save_results(float grid_value[Nx][Ny]){
     FILE *file;
-
-    // Save the results to the ouput file.
-    file = fopen(FILENAME, "w");      // Following https://stackoverflow.com/a/9840678
-
+    file = fopen(FILENAME, "w");
     if(file == NULL)
     {
         printf("FILE pointer NULL!");   

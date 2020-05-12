@@ -1,23 +1,20 @@
-// #include <stdio.h>   // included in aux_func.c for debug
-// #include <stdlib.h>     // For exit(1)
-
 #include "define_host_func.cu"
 #include "solver.cu"
 #include "grid_cu.h"
 
-
 int main(){
-    // Grid_t h_u;
+    /* Allocate memory for grid on host. */
     Grid_t *h_u = (Grid_t*)malloc(sizeof(Grid_t));
 
-    // Solve the Laplace's equation and save results to h_u->value.
-    solve_laplace(h_u);
+    /* Call the solver to invoke our kernels. */
+    solver(h_u);
 
-    // Save results to a file.
+    /* Save results to the output file. */
     save_results(h_u->value);
 
-    // Free the pointer.
+    /* Free the host memory & pointer. */
     free(h_u);
+    h_u = NULL;
 
     return 0;
 }
