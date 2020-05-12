@@ -4,7 +4,7 @@
 #define PARAMETER_H
 
 // Matrix order parameters
-#define Nx 50
+#define Nx 1000
 #define Ny Nx
 
 // Error tolerence paramters

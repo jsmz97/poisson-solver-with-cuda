@@ -3,10 +3,6 @@
 #ifndef PARAMETERS_CU_H
 #define PARAMETERS_CU_H
 
-// A thread block size of 16x16 (256 threads),
-// although arbitrary in this case, is a common choice.
-// The grid is created with enough blocks to have
-// one thread per matrix element as before.
 #define BLOCK_SIZE 16
 
 #define Nx 1000
