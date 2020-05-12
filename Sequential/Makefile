@@ -1,7 +1,7 @@
 CC = gcc
 
 Jacobi:
-	$(CC) -o Jacobi main.c -lm
+	$(CC) -o Jacobi Jacobi.c -lm
 build:
 	mkdir Outputs
 clean:
