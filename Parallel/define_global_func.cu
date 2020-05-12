@@ -1,10 +1,9 @@
-// aux_func.cu implement functions in aux_func.c to kernel functions.
-#ifndef GLOBAL_FUNC_CU
-#define GLOBAL_FUNC_CU
+#ifndef DEFINE_GLOBAL_FUNC_CU
+#define DEFINE_GLOBAL_FUNC_CU
 
 #include <stdio.h>
-#include "parameters.h"
-#include "grid.h"
+#include "parameters_cu.h"
+#include "grid_cu.h"
 
 /* Grid Initialization */
 __global__ void grid_init (Grid_t *u){

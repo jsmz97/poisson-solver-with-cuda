@@ -3,7 +3,7 @@
 
 #include "define_host_func.cu"
 #include "solver.cu"
-#include "grid.h"
+#include "grid_cu.h"
 
 
 int main(){

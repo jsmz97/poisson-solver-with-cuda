@@ -1,10 +1,9 @@
-// aux_func.cu implement functions in aux_func.c to kernel functions.
-#ifndef HOST_DEVICE_FUNC_CU
-#define HOST_DEVICE_FUNC_CU
+#ifndef DEFINE_HOST_FUNC_CU
+#define DEFINE_HOST_FUNC_CU
 
-#include <stdlib.h>     // For exit(1)
+#include <stdlib.h>    
 #include <stdio.h>
-#include "parameters.h"
+#include "parameters_cu.h"
 
 // Test if the value exceeds the maximul value. If so, print error info.
 __device__ int is_exceed (float value, float max){

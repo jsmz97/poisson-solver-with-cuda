@@ -1,13 +1,13 @@
 // #include <stdio.h>   // included in aux_func.c for debug
-#ifndef KERNEL_CU
-#define KERNEL_CU
+#ifndef SOLVER_CU
+#define SOLVER_CU
 
 #include <stdio.h>
-#include "declare_func.h"
+#include "declare_func_cu.h"
 #include "define_global_func.cu"
 #include "define_host_func.cu"
-#include "parameters.h"
-#include "grid.h"
+#include "parameters_cu.h"
+#include "grid_cu.h"
 
 // __device__ int *d_p_not_tolerent;
 

@@ -1,9 +1,7 @@
-// head_cu.h declares all the functions used in kernel.cu
+#ifndef DECLARE_FUNC_CU_H
+#define DECLARE_FUNC_CU_H
 
-#ifndef HEAD_CU_H
-#define HEAD_CU_H
-
-#include "grid.h"
+#include "grid_cu.h"
 
 __global__ void grid_init (Grid_t *u);
 
